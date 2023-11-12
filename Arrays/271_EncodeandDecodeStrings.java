@@ -36,3 +36,46 @@ public class Codec {
         return decodedStrings;
     }
 }
+
+
+
+//Faster way
+
+public class Codec {
+    public String encode(List<String> strs) {
+        StringBuilder sb = new StringBuilder();
+        
+        // ["Hello","World"] => "5#Hello5#World"
+        for (String str : strs) {
+            sb.append(str.length());
+            sb.append("#");
+            sb.append(str);
+        }
+        
+        return sb.toString();
+    }
+
+    public List<String> decode(String s) {
+        List<String> list = new ArrayList<>();
+        
+        int i = 0;
+        
+        // "5#Hello5#World"
+        //  i
+        //   j
+        //         ↑
+        //   (j + len + 1)
+        
+        while (i < s.length()) {
+            int j = i;
+            while (s.charAt(j) != '#') {
+                j++;
+            }
+            int len = Integer.parseInt(s.substring(i, j));
+            list.add(s.substring(j + 1, j + len + 1));
+            i = j + len + 1;
+        }
+        
+        return list;
+    }
+}
