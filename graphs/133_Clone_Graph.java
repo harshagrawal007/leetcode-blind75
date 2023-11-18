@@ -18,6 +18,28 @@ class Node {
 }
 */
 
+// recursion on exisiting method
+class Solution {
+    
+    public HashMap<Integer, Node> map = new HashMap<>();
+        
+    public Node cloneGraph(Node node) {
+        if (node == null) { 
+            return null;
+        } else if (map.containsKey(node.val)) { 
+            return map.get(node.val);
+        } else {
+            Node newNode = new Node(node.val);
+            map.put(node.val, newNode);
+            for (Node neighbor: node.neighbors) {
+                newNode.neighbors.add(cloneGraph(neighbor));
+            }
+            return newNode;
+        }
+    }
+}
+
+
 
  
 class Solution {
