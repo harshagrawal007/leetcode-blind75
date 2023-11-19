@@ -9,7 +9,7 @@ class Solution {
         for (int i = 0; i < prerequisites.length; i++) {
             adj.get(prerequisites[i][0]).add(prerequisites[i][1]);
         }
-        // array equl to size of courses
+        // array equal to size of courses
         int[] visited = new int[numCourses];
         for (int i = 0; i < numCourses; i++) {
             if (visited[i] == 0) {
@@ -22,9 +22,9 @@ class Solution {
     }
     
     // 0 not visited
-    // visited
+    // 1 visited
     // 2 means cyclic, see value 2 again, return iscyclic true
-// if is cyclic true return true isycclic
+    // if is cyclic true return true iscyclic
     
     private boolean isCyclic(List<List<Integer>> adj, int[] visited, int curr) {
         if (visited[curr] == 2) {
