@@ -13,3 +13,24 @@ class Solution {
         return null;
     }
 }
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        HashSet<Integer> set = new HashSet<>();
+        int i ;
+        for (i= 0; i < nums.length; i++) {
+            if (set.contains(target - nums[i]) ){
+                break;
+            }
+            set.add(nums[i]);
+        }
+
+        for(int j=0;j<i;j++){
+            if(nums[j] == target - nums[i]){
+                return new int[]{i,j};
+            }
+        }
+        // In case there is no solution, we'll just return null
+        return new int[2];
+    }
+}
