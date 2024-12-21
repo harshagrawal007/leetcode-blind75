@@ -1,0 +1,49 @@
+class LockManager {
+    private Map<String, String> locks = new HashMap<>(); // recordId -> userId
+    private Queue<LockRequest> requestQueue = new LinkedList<>(); // FIFO queue for requests
+    private Set<String> pendingRequests = new HashSet<>(); // to track repeated requests
+
+    public Optional<Integer> setorincbycaller(String key, Field field, String callerId) {
+        // Check if the record is locked
+        if (locks.containsKey(key) && !locks.get(key).equals(callerId)) {
+            // If locked by another user, enqueue the request
+            if (!pendingRequests.contains(callerId + key)) {
+                requestQueue.add(new LockRequest(callerId, key));
+                pendingRequests.add(callerId + key);
+            }
+            return Optional.empty(); // Return empty since the lock can't be acquired
+        }
+
+        // If the record is not locked, lock it
+        locks.put(key, callerId);
+        
+        // Perform the operation
+        // ...
+
+        // Unlock the record after the operation (consider using a finally block)
+        locks.remove(key);
+        pendingRequests.remove(callerId + key); // Remove from pending requests
+        processQueue(); // Check and process the next request in the queue
+        
+        return Optional.of(result); // Return the result of the operation
+    }
+
+    private void processQueue() {
+        // Check if the queue has any pending requests
+        if (!requestQueue.isEmpty()) {
+            LockRequest nextRequest = requestQueue.poll();
+            locks.put(nextRequest.key, nextRequest.callerId); // Lock the next record
+            pendingRequests.remove(nextRequest.callerId + nextRequest.key); // Clean up pending requests
+        }
+    }
+
+    private class LockRequest {
+        String callerId;
+        String key;
+
+        LockRequest(String callerId, String key) {
+            this.callerId = callerId;
+            this.key = key;
+        }
+    }
+}
