@@ -1,40 +1,22 @@
-class LRUCache {
-    public int capacity;
-    private LinkedHashMap<Integer, Integer> cache;
+/**
+ * LeetCode 146: LRU Cache
+ *
+ * REQUIREMENTS:
+ * - get(key): return value if key exists, else -1
+ * - put(key, value): insert or update value
+ * - If capacity exceeded, evict least recently used (LRU) item
+ * - All operations must be O(1) time
+ *
+ * APPROACH: Java LinkedHashMap with access-order iteration
+ * PATTERN: Use built-in ordered map to track recency
+ *
+ * KEY INSIGHT:
+ * - LinkedHashMap can operate in access-order mode by passing `true`
+ *   to the constructor.
+ * - Override removeEldestEntry to automatically evict once capacity is exceeded.
+ * - get() and put() both update access order in O(1).
+ */
 
-    public LRUCache(int capacity) {
-        cache = new LinkedHashMap<>();
-        this.capacity = capacity;
-    }
-
-    private boolean isFull() {
-        return capacity == cache.size();
-    }
-
-    public int get(int key) {
-        //remove from the cache first
-        if (cache.containsKey(key)) {
-            int value = cache.get(key);
-            cache.remove(key);
-            cache.put(key,value);
-            return value;
-        }
-        return -1;
-    }
-
-    public void put(int key, int value) {
-        if(cache.containsKey(key)) {
-            //remove, then put back (this will affect order)
-            cache.remove(key);
-        } else if(isFull()) {
-                //remove first item
-                int firstItemKey = cache.entrySet().iterator().next().getKey();
-                cache.remove(firstItemKey);
-            }
-        
-        cache.put(key, value);
-    }
-}
 
 /**
  * Your LRUCache object will be instantiated and called as such:
@@ -43,34 +25,56 @@ class LRUCache {
  * obj.put(key,value);
  */
 
- // another way 
- class LRUCache {
-    int capacity;
-    LinkedHashMap<Integer, Integer> dic;
-    
+import java.util.LinkedHashMap;
+import java.util.Map;
+class LRUCache {
+    private final int capacity;
+    private final LinkedHashMap<Integer, Integer> cache;
+
     public LRUCache(int capacity) {
         this.capacity = capacity;
-        // here true indicates the map entries are in access order.
-        // false means that insert order 
-        //0.75F means if the elements are 12/16 it will make the size double 
-        dic = new LinkedHashMap<>(5, 0.75f, true) {
+
+        // LinkedHashMap with accessOrder=true makes it LRU-aware.
+        // When a key is accessed (get/put), it moves to the end of the linked list.
+        // removeEldestEntry is called after each put operation.
+        this.cache = new LinkedHashMap<Integer, Integer>(capacity, 0.75f, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<Integer, Integer> eldest) {
-                return size() > capacity;
+                // When true, the eldest entry (least recently used) is removed.
+                return size() > LRUCache.this.capacity;
             }
             //Returns true if this map should remove its eldest entry. 
             //This method is invoked by put and putAll after inserting a 
-            //new entry into the map.
-        };
-    }
-    
-    public int get(int key) {
-        return dic.getOrDefault(key, -1);
-    }
-    
-    public void put(int key, int value) {
-        dic.put(key, value);
+            //new entry into the map.        
+            };
     }
 
+    public int get(int key) {
+        // get() updates access order automatically in LinkedHashMap
+        return cache.getOrDefault(key, -1);
+    }
+
+    public void put(int key, int value) {
+        cache.put(key, value); // updates access order and may evict eldest
+    }
 }
+
+/* ============================================================================
+ * COMPLEXITY ANALYSIS
+ * ============================================================================
+ * Time: O(1) average for get() and put()
+ * Space: O(capacity)
+ *
+ * - LinkedHashMap provides constant-time access and update for both operations.
+ * - Eviction happens automatically when size exceeds capacity.
+ * ============================================================================
+ */
+
+/* ============================================================================
+ * KEY CITATIONS & REFERENCES
+ * ============================================================================
+ * 1. JavaDoc for LinkedHashMap (accessOrder mode)
+ * 2. LeetCode discuss: "LRU Cache Java solution using LinkedHashMap" 
+ * 3. Classic cache design patterns: LRU cache using doubly-linked list + hash map
+ */
 

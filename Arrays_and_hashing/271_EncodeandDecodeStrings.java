@@ -1,6 +1,24 @@
-public class Codec {
+import java.util.ArrayList;
+import java.util.List;
 
-    // Encodes a list of strings to a single string.
+/**
+ * LeetCode 271: Encode and Decode Strings
+ *
+ * PROBLEM: Design an algorithm to encode a list of strings to a single string, and
+ * decode it back to the original list. The encoding must handle arbitrary string
+ * contents (including empty strings and strings containing digits, letters, and
+ * special characters).
+ *
+ * KEY INSIGHT:
+ * - Use a length-prefix encoding: store each string as "<len>#<string>".
+ * - During decoding, parse the length prefix, then read exactly that many characters.
+ * - This avoids ambiguity even when the string contains the delimiter.
+ */
+public class Codec {
+     /**
+     * Encodes a list of strings to a single string.
+     * Example: ["Hello", "World"] -> "5#Hello5#World"
+     */
     public String encode(List<String> strs) {
          StringBuilder encodedString = new StringBuilder();
         for(String str: strs){
@@ -10,8 +28,9 @@ public class Codec {
         }
         return encodedString.toString();
     }
-
-    // Decodes a single string to a list of strings.
+    /**
+     * Decodes a single string back into a list of strings.
+     */
     public List<String> decode(String s) {
         // System.out.println(s);
          List<String> decodedStrings = new ArrayList();
@@ -79,3 +98,22 @@ public class Codec {
         return list;
     }
 }
+
+
+/* ==========================================================================
+ * COMPLEXITY ANALYSIS
+ * ==========================================================================
+ * Time: O(n) where n is the total length of all strings.
+ * Space: O(n) for the encoded string and decoded list.
+ *
+ * The overall work is linear in the size of the input data.
+ * ========================================================================== */
+
+/* ==========================================================================
+ * KEY CITATIONS & REFERENCES
+ * ==========================================================================
+ * 1. LeetCode discussion: "Encode and Decode Strings".
+ * 2. Serialization patterns: length-prefixed encoding in network protocols.
+ * 3. Related problem: "Serialize and Deserialize Binary Tree" (LeetCode 297).
+ * ========================================================================== */
+

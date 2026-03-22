@@ -1,4 +1,27 @@
 /**
+ * LeetCode 104: Maximum Depth of Binary Tree
+ *
+ * PROBLEM: Find the maximum depth (height) of a binary tree.
+ * Depth = number of nodes along longest path from root to leaf.
+ *
+ * Example: Tree [3,9,20,null,null,15,7] → depth 3
+ *         3
+ *        / \
+ *       9  20
+ *          / \
+ *         15  7
+ *
+ * APPROACH: Multiple traversal methods (BFS/DFS)
+ * PATTERN: Tree height calculation using level-order or recursion
+ *
+ * KEY INSIGHT:
+ * - Depth = max path length from root to any leaf
+ * - Can use BFS (level order) or DFS (recursion/iteration)
+ * - Base case: null node has depth 0
+ * - Recursive: 1 + max(left_depth, right_depth)
+ */
+
+/**
  * Definition for a binary tree node.
  * public class TreeNode {
  *     int val;
@@ -13,7 +36,20 @@
  *     }
  * }
  */
-
+/**
+ * SOLUTION 1: BFS (Level Order Traversal)
+ * Time: O(n) | Space: O(w) where w = max width
+ *
+ * ALGORITHM:
+ * - Use queue for level-order traversal
+ * - Add null markers between levels to count depth
+ * - Each null marker = one level completed
+ *
+ * WHY BFS WORKS:
+ * - Visits nodes level by level
+ * - Null markers count completed levels
+ * - Space efficient for wide trees (vs recursion)
+ */
 // using BFS no recursion
 class Solution {
     public int maxDepth(TreeNode root) {
